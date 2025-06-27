@@ -4,7 +4,7 @@ const db = mysql.createConnection({
     port: 3306,
     user: 'root',
     password: 'root',
-    database: 'NOME DO BANCO DE DADOS AQUI',
+    database: 'base_revisao_saep',
     dateStrings: true
 });
 db.connect((erro)=>{
