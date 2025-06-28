@@ -1,0 +1,36 @@
+body{
+    font-family: 'Gill Sans';
+    margin: 0px;
+}
+#menu_topo{
+    background-color: #a1970a;
+    padding: 30px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+}
+
+#menus{
+    display: flex;
+    gap: 40px;
+}
+
+#conteudo{
+    display: flex;
+}
+#caixa_alta, #caixa_baixa, #caixa_media{
+    width: 33%;
+    min-height: 250px;
+}
+
+.cartoes{
+    background-color: lightgray;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 20px;
+}
+.cartoes:hover{
+    cursor: pointer;
+    background-color: gray;
+}

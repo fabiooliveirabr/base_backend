@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="estilo.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+    <div id="menu_topo">
+            <div>Gestão de chamados</div>
+
+            <div id="menus">
+                <div id="btn_gerenciar">Gerenciar chamados</div>
+                <div id="btn_clientes">Cadastrar clientes</div>
+                <div id="btn_chamados">Cadastrar chamados</div>
+            </div>
+    </div>
+
+    <div id="conteudo">
+        <div id="caixa_alta"></div>
+        <div id="caixa_media"></div>
+        <div id="caixa_baixa"></div>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            $("#conteudo").hide()
+        })
+
+        $("#btn_gerenciar").click(function(){
+            $("#conteudo").show()
+            $("#caixa_alta").html("<h2>Classificação Alta</h2>")
+            $("#caixa_media").html("<h2>Classificação Média</h2>")
+            $("#caixa_baixa").html("<h2>Classificação Baixa</h2>")
+
+            $.ajax({
+                url: 'http://localhost:3000/prioridade_alta',
+                dataType: 'json',
+                contentType: 'application/json',
+                type: 'GET',
+                success: function(resposta){
+                    resposta.forEach(function(dados){
+                        $("#caixa_alta").append(`
+                            <div class='cartoes'>
+                                Assunto: <span id='assunto'>${dados.assunto}</span> <br>
+                                Descrição: <span id='descricao'>${dados.descricao}</span> <br>
+                                Cliente: <span id='nome'>${dados.nome}</span> <br>
+                                ID Cliente: <span id='id_cliente'>${dados.id_cliente}</span> <br>
+                                Prioridade: <span id='prioridade'>${dados.prioridade}</span> <br>
+                            </div>
+                        `)
+                    })
+                },
+                error: function(){
+                    alert("Falha ao acessar GET /prioridade_alta")
+                }
+            }) //Fim do ajax1
+
+             $.ajax({
+                url: 'http://localhost:3000/prioridade_media',
+                dataType: 'json',
+                contentType: 'application/json',
+                type: 'GET',
+                success: function(resposta){
+                    resposta.forEach(function(dados){
+                        $("#caixa_media").append(`
+                            <div class='cartoes'>
+                                Assunto: <span id='assunto'>${dados.assunto}</span> <br>
+                                Descrição: <span id='descricao'>${dados.descricao}</span> <br>
+                                Cliente: <span id='nome'>${dados.nome}</span> <br>
+                                ID Cliente: <span id='id_cliente'>${dados.id_cliente}</span> <br>
+                                Prioridade: <span id='prioridade'>${dados.prioridade}</span> <br>
+                            </div>
+                        `)
+                    })
+                },
+                error: function(){
+                    alert("Falha ao acessar GET /prioridade_media")
+                }
+            })//Fim do ajax2
+             $.ajax({
+                url: 'http://localhost:3000/prioridade_baixa',
+                dataType: 'json',
+                contentType: 'application/json',
+                type: 'GET',
+                success: function(resposta){
+                    resposta.forEach(function(dados){
+                        $("#caixa_baixa").append(`
+                            <div class='cartoes'>
+                                Assunto: <span id='assunto'>${dados.assunto}</span> <br>
+                                Descrição: <span id='descricao'>${dados.descricao}</span> <br>
+                                Cliente: <span id='nome'>${dados.nome}</span> <br>
+                                ID Cliente: <span id='id_cliente'>${dados.id_cliente}</span> <br>
+                                Prioridade: <span id='prioridade'>${dados.prioridade}</span> <br>
+                            </div>
+                        `)
+                    })
+                },
+                error: function(){
+                    alert("Falha ao acessar GET /prioridade_baixa")
+                }
+            })//Fim do ajax3
+
+        }) // Fim do click no botão gerenciar
+
+
+
+           
+
+
+
+
+    </script>
+
+
+
+    
+</body>
+</html>
