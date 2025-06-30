@@ -34,3 +34,7 @@ body{
     cursor: pointer;
     background-color: gray;
 }
+
+#menus div:hover{
+    cursor: pointer;
+}
