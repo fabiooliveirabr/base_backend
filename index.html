@@ -25,21 +25,150 @@
     </div>
 
     <div id="tela_escura">
+        <div id="form_editar_chamado" class="formularios">
+            <button id="fechar_form_editar_chamado">x</button><br>
+            <h1>Editar/Deletar chamado</h1>
+            ID do chamado: <br>
+            <input type="text" id="caixa_id_chamado" disabled><br><br>
+
+            Assunto: <br>
+            <input type="text" id="caixa_assunto"> <br><br>
+
+            Descrição: <br>
+            <input type="text" id="caixa_descricao"> <br><br>
+
+            Cliente: <br>
+            <select id="caixa_cliente"></select> <br><br>
+
+            Prioridade: <br>
+            <select id="caixa_prioridade">
+                <option value="">Selecione</option>
+                <option value="Alta">Alta</option>
+                <option value="Média">Média</option>
+                <option value="Baixa">Baixa</option>
+            </select> <br><br>
+            <button id="btn_salvar_chamado">Salvar alterações</button>
+            <button id="btn_deletar_chamado">Deletar</button>
+        </div> <!-- Fim do formulário de editar/deletar -->
+
+        <div id="form_cad_chamado" class="formularios">
+            <button id="fechar_form_cad_chamado">x</button><br>
+            <h1>Cadastrar chamado</h1>
+            Assunto: <br>
+            <input type="text" id="caixa_assunto"> <br><br>
+
+            Descrição: <br>
+            <input type="text" id="caixa_descricao"> <br><br>
+
+            Cliente: <br>
+            <select id="caixa_cliente"></select> <br><br>
+
+            Prioridade: <br>
+            <select id="caixa_prioridade">
+                <option value="">Selecione</option>
+                <option value="Alta">Alta</option>
+                <option value="Média">Média</option>
+                <option value="Baixa">Baixa</option>
+            </select> <br><br>
+            <button id="btn_cad_chamado">Cadastrar</button>
+        </div> <!-- Fim do formulário de cadastrar chamado -->
+
         <div id="form_cad_cliente" class="formularios">
             <button id="fechar_form_cad_cliente">x</button> <br>
+            <h1>Cadastrar cliente</h1>
             Nome: <br>
             <input type="text" id="caixa_nome"> <br><br>
             E-mail: <br>
             <input type="email" id="caixa_email"> <br><br>
             <button id="btn_cad_cliente">Cadastrar cliente</button>
-        </div>
+        </div> <!-- Fim do formulário cadastrar cliente -->
     </div>
 
 
     <script>
-        $(document).ready(function(){
-            $("#conteudo").hide()
+        // Click nos cartões
+        $(document).on("click", ".cartoes", function(){
+            $("#form_editar_chamado").show();
+            $("#tela_escura").show();
+
+            var id_chamado = $(this).find("#id_chamado").text()
+            $("#form_editar_chamado #caixa_id_chamado").val(id_chamado)
+
+            var assunto = $(this).find("#assunto").text()
+            $("#form_editar_chamado #caixa_assunto").val(assunto)
+
+            var descricao = $(this).find("#descricao").text()
+            $("#form_editar_chamado #caixa_descricao").val(descricao)
+
+            var cliente = $(this).find("#id_cliente").text()
+            $("#form_editar_chamado #caixa_cliente").val(cliente)
+
+
+
         })
+
+        function carregarClientes(){
+            $.ajax({
+                url: "http://localhost:3000/clientes",
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json",
+                success: function(resposta){
+                    resposta.forEach(function(dados){
+                        $("#form_cad_chamado #caixa_cliente").append(`
+                        <option value='${dados.id_cliente}'>
+                            ${dados.nome}
+                        </option>
+                        `)
+                        $("#form_editar_chamado #caixa_cliente").append(`
+                        <option value='${dados.id_cliente}'>
+                            ${dados.nome}
+                        </option>
+                        `)
+                    })
+                },
+                error: function(){
+                    alert("Falha no GET /clientes")
+                }
+            })
+        }  // Fim da função carregarClientes
+
+        $(document).ready(function(){
+            $("#conteudo").hide();
+            $("#form_cad_cliente").hide();
+            $("#form_cad_chamado").hide();
+            $("#form_editar_chamado").hide();
+            $("#tela_escura").hide();
+            carregarClientes();
+        })
+        //Abrir o formulário para cadastrar clientes
+        $("#btn_clientes").click(function(){
+            $("#form_cad_cliente").show();
+            $("#tela_escura").show();
+        })
+        //Abrir o formulário para cadastrar chamados
+        $("#btn_chamados").click(function(){
+            $("#form_cad_chamado").show();
+            $("#tela_escura").show();
+        })
+
+
+        // Fechar o fomulário de cadastrar cliente
+        $("#fechar_form_cad_cliente").click(function(){
+            $("#form_cad_cliente").hide();
+            $("#tela_escura").hide();
+        })
+        // Fechar o formulário de cadastrar chamado
+        $("#fechar_form_cad_chamado").click(function(){
+            $("#form_cad_chamado").hide();
+            $("#tela_escura").hide();
+        })
+        // Fechar o formulário editar/deletar chamado
+        $("#fechar_form_editar_chamado").click(function(){
+            $("#form_editar_chamado").hide();
+            $("#tela_escura").hide();
+        })
+
 
         $("#btn_gerenciar").click(function(){
             $("#conteudo").show()
@@ -56,6 +185,7 @@
                     resposta.forEach(function(dados){
                         $("#caixa_alta").append(`
                             <div class='cartoes'>
+                                ID Chamado: <span id='id_chamado'>${dados.id_chamado}</span> <br>
                                 Assunto: <span id='assunto'>${dados.assunto}</span> <br>
                                 Descrição: <span id='descricao'>${dados.descricao}</span> <br>
                                 Cliente: <span id='nome'>${dados.nome}</span> <br>

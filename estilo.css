@@ -38,3 +38,22 @@ body{
 #menus div:hover{
     cursor: pointer;
 }
+
+#tela_escura{
+    background-color: rgba(0, 0 ,0, 0.5);
+    position: absolute;
+    left:0px;
+    top: 0px;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.formularios{
+    background-color: white;
+    padding: 20px;
+    font-size: 20px;
+}
