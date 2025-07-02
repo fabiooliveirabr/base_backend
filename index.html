@@ -86,6 +86,109 @@
 
 
     <script>
+        //Click no btn_cad_chamado
+        $("#btn_cad_chamado").click(function(){
+            $("#form_cad_chamado").hide()
+            $("#tela_escura").hide();
+            var assunto = $("#form_cad_chamado #caixa_assunto").val()
+            var descricao = $("#form_cad_chamado #caixa_descricao").val()
+            var fk_id_cliente = $("#form_cad_chamado #caixa_cliente").val()
+            var prioridade = $("#form_cad_chamado #caixa_prioridade").val()
+            $.ajax({
+                url: "http://localhost:3000/chamados",
+                type: "POST",
+                dataType: "json",
+                contentType : "application/json",
+                data: JSON.stringify({assunto, descricao, 
+                                     fk_id_cliente, prioridade}),
+                success: function(resposta){
+                    alert(resposta.msg)
+                    location.reload()
+                },
+                error: function(){
+                    alert("Falha no POST /chamados ")
+                }
+            })
+
+        }) //Fim do btn_cad_chamado
+
+
+        //Click no btn_cad_cliente
+        $("#btn_cad_cliente").click(function(){
+            $("#form_cad_cliente").hide();
+            $("#tela_escura").hide();
+            var nome = $("#form_cad_cliente #caixa_nome").val()
+            var email = $("#form_cad_cliente #caixa_email").val()
+            $.ajax({
+                url: "http://localhost:3000/clientes",
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify({nome, email}),
+                success: function(resposta){
+                    alert(resposta.msg)
+                    location.reload()
+                },
+                error: function(){
+                    alert("Falha no POST /clientes")
+                }
+            })
+
+        }) // Fim do btn_cad_cliente
+
+
+        // Click no btn_salvar_chamado
+        $("#btn_salvar_chamado").click(function(){
+            $("#form_editar_chamado").hide();
+            $("#tela_escura").hide();
+
+            var id_chamado = $("#form_editar_chamado #caixa_id_chamado").val()
+            var fk_id_cliente = $("#form_editar_chamado #caixa_cliente").val()
+            var prioridade = $("#form_editar_chamado #caixa_prioridade").val()
+            var assunto = $("#form_editar_chamado #caixa_assunto").val()
+            var descricao = $("#form_editar_chamado #caixa_descricao").val()
+            
+            $.ajax({
+                url: "http://localhost:3000/chamado",
+                type: "PUT",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify({id_chamado, fk_id_cliente, prioridade,
+                                     assunto, descricao}),
+                success: function(resposta){
+                    alert(resposta.msg)
+                    location.reload()
+                },
+                error: function(){
+                    alert("Falha no PUT /chamado")
+                }
+            })
+
+        })// fim do btn_salvar_chamado
+
+
+        //Click no btn_deletar_chamado
+        $("#btn_deletar_chamado").click(function(){
+            var id_chamado = $("#form_editar_chamado #caixa_id_chamado").val()
+            if(!confirm("Tem certeza que deseja apagar o chamado nº "+id_chamado+"?")){
+                return;
+            }
+            $.ajax({
+                url:"http://localhost:3000/chamado/"+id_chamado,
+                type: "DELETE",
+                dataType: "json",
+                contentType: "application/json",
+                success: function(resposta){
+                    alert(resposta.msg)
+                    location.reload() // recarregar a página
+                },
+                error: function(){
+                    alert("Falha no DELETE /chamado")
+                }
+            })
+
+        }) // fim do click no  btn_deletar_chamado
+
         // Click nos cartões
         $(document).on("click", ".cartoes", function(){
             $("#form_editar_chamado").show();
@@ -102,6 +205,9 @@
 
             var cliente = $(this).find("#id_cliente").text()
             $("#form_editar_chamado #caixa_cliente").val(cliente)
+
+            var prioridade = $(this).find("#prioridade").text()
+            $("#form_editar_chamado #caixa_prioridade").val(prioridade)
 
 
 
@@ -209,6 +315,7 @@
                     resposta.forEach(function(dados){
                         $("#caixa_media").append(`
                             <div class='cartoes'>
+                                ID Chamado: <span id='id_chamado'>${dados.id_chamado}</span> <br>
                                 Assunto: <span id='assunto'>${dados.assunto}</span> <br>
                                 Descrição: <span id='descricao'>${dados.descricao}</span> <br>
                                 Cliente: <span id='nome'>${dados.nome}</span> <br>
@@ -231,6 +338,7 @@
                     resposta.forEach(function(dados){
                         $("#caixa_baixa").append(`
                             <div class='cartoes'>
+                                 ID Chamado: <span id='id_chamado'>${dados.id_chamado}</span> <br>
                                 Assunto: <span id='assunto'>${dados.assunto}</span> <br>
                                 Descrição: <span id='descricao'>${dados.descricao}</span> <br>
                                 Cliente: <span id='nome'>${dados.nome}</span> <br>
